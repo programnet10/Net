@@ -1,0 +1,99 @@
+
+Public Class Form1
+
+    Private txtInput As New TextBox()
+    Private txtOutput As New TextBox()
+    Private btnChange As New Button()
+    Private btnClear As New Button()
+    Private btnEnd As New Button()
+
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+        Me.Text = "Font Application"
+        Me.Size = New Size(430, 300)
+        Me.StartPosition = FormStartPosition.CenterScreen
+
+        Dim lblInput As New Label()
+        lblInput.Text = "Enter Text:"
+        lblInput.Location = New Point(30, 30)
+        lblInput.Size = New Size(100, 25)
+        Me.Controls.Add(lblInput)
+
+        txtInput.Location = New Point(140, 30)
+        txtInput.Size = New Size(220, 25)
+        Me.Controls.Add(txtInput)
+
+        Dim lblOutput As New Label()
+        lblOutput.Text = "Text Length:"
+        lblOutput.Location = New Point(30, 80)
+        lblOutput.Size = New Size(100, 25)
+        Me.Controls.Add(lblOutput)
+
+        txtOutput.Location = New Point(140, 80)
+        txtOutput.Size = New Size(220, 25)
+        txtOutput.ReadOnly = True
+        Me.Controls.Add(txtOutput)
+
+        btnChange.Text = "Change"
+        btnChange.Location = New Point(30, 140)
+        btnChange.Size = New Size(90, 35)
+        Me.Controls.Add(btnChange)
+
+        btnClear.Text = "Clear"
+        btnClear.Location = New Point(145, 140)
+        btnClear.Size = New Size(90, 35)
+        Me.Controls.Add(btnClear)
+
+        btnEnd.Text = "End"
+        btnEnd.Location = New Point(260, 140)
+        btnEnd.Size = New Size(90, 35)
+        Me.Controls.Add(btnEnd)
+
+        AddHandler btnChange.Click, AddressOf Change_Click
+        AddHandler btnClear.Click, AddressOf Clear_Click
+        AddHandler btnEnd.Click, AddressOf End_Click
+        AddHandler txtInput.Leave, AddressOf Input_Leave
+
+    End Sub
+
+    Private Sub Change_Click(ByVal sender As Object, ByVal e As EventArgs)
+
+        If txtInput.Text = UCase(txtInput.Text) Then
+            txtInput.Text = LCase(txtInput.Text)
+        Else
+            txtInput.Text = UCase(txtInput.Text)
+        End If
+
+        txtInput.BackColor = Color.Pink
+        txtInput.ForeColor = Color.Blue
+        txtOutput.BackColor = Color.Cyan
+        txtOutput.ForeColor = Color.Black
+
+        txtOutput.Text = Len(txtInput.Text).ToString()
+
+    End Sub
+
+    Private Sub Input_Leave(ByVal sender As Object, ByVal e As EventArgs)
+
+        txtOutput.Text = Len(txtInput.Text).ToString()
+
+    End Sub
+
+    Private Sub Clear_Click(ByVal sender As Object, ByVal e As EventArgs)
+
+        txtInput.Clear()
+        txtOutput.Clear()
+        txtInput.BackColor = SystemColors.Window
+        txtInput.ForeColor = SystemColors.WindowText
+        txtOutput.BackColor = SystemColors.Window
+        txtOutput.ForeColor = SystemColors.WindowText
+
+    End Sub
+
+    Private Sub End_Click(ByVal sender As Object, ByVal e As EventArgs)
+
+        Me.Close()
+
+    End Sub
+
+End Class
