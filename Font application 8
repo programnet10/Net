@@ -1,0 +1,71 @@
+
+<%@ Page Language="VB" AutoEventWireup="false" CodeFile="Default.aspx.vb" Inherits="_Default" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Font Application</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <h2>Font Application</h2>
+
+        <asp:TextBox ID="TextBox1" runat="server"
+            Text="Welcome to VB.NET"
+            Width="300px">
+        </asp:TextBox>
+
+        <br /><br />
+
+        Font Size:
+        <asp:DropDownList ID="DropDownList1" runat="server">
+            <asp:ListItem>12</asp:ListItem>
+            <asp:ListItem>16</asp:ListItem>
+            <asp:ListItem>20</asp:ListItem>
+            <asp:ListItem>24</asp:ListItem>
+        </asp:DropDownList>
+
+        <br /><br />
+
+        <asp:CheckBox ID="CheckBox1" runat="server"
+            Text="Bold" />
+
+        <asp:CheckBox ID="CheckBox2" runat="server"
+            Text="Italic" />
+
+        <br /><br />
+
+        <asp:Button ID="Button1" runat="server"
+            Text="Apply Font"
+            OnClick="Button1_Click" />
+
+        <br /><br />
+
+        <asp:Label ID="Label1" runat="server"
+            Text="Font will appear here."
+            Font-Size="16pt">
+        </asp:Label>
+    </form>
+</body>
+</html>
+
+
+//vb
+
+Partial Class _Default
+    Inherits System.Web.UI.Page
+
+    Protected Sub Button1_Click(ByVal sender As Object, _
+        ByVal e As System.EventArgs)
+
+        Label1.Text = Server.HtmlEncode(TextBox1.Text)
+
+        Label1.Font.Size = FontUnit.Point( _
+            Convert.ToInt32(DropDownList1.SelectedValue))
+
+        Label1.Font.Bold = CheckBox1.Checked
+        Label1.Font.Italic = CheckBox2.Checked
+
+    End Sub
+
+End Class
