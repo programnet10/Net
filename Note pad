@@ -1,0 +1,98 @@
+
+Public Class Form1
+
+    Private txt As New RichTextBox()
+    Private menu As New MenuStrip()
+    Private currentFile As String = ""
+
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+        Me.Text = "My Notepad"
+        Me.Size = New Size(800, 550)
+        Me.StartPosition = FormStartPosition.CenterScreen
+
+        Dim fileMenu As New ToolStripMenuItem("File")
+        Dim editMenu As New ToolStripMenuItem("Edit")
+
+        fileMenu.DropDownItems.Add("New", Nothing, AddressOf NewFile)
+        fileMenu.DropDownItems.Add("Open", Nothing, AddressOf OpenFile)
+        fileMenu.DropDownItems.Add("Save", Nothing, AddressOf SaveFile)
+        fileMenu.DropDownItems.Add("Save As", Nothing, AddressOf SaveAsFile)
+        fileMenu.DropDownItems.Add("Exit", Nothing, AddressOf ExitApp)
+
+        editMenu.DropDownItems.Add("Cut", Nothing, AddressOf CutText)
+        editMenu.DropDownItems.Add("Copy", Nothing, AddressOf CopyText)
+        editMenu.DropDownItems.Add("Paste", Nothing, AddressOf PasteText)
+        editMenu.DropDownItems.Add("Select All", Nothing, AddressOf SelectAllText)
+
+        menu.Items.Add(fileMenu)
+        menu.Items.Add(editMenu)
+
+        txt.Dock = DockStyle.Fill
+        txt.Font = New Font("Arial", 12)
+        txt.AcceptsTab = True
+
+        Me.Controls.Add(txt)
+        Me.Controls.Add(menu)
+        Me.MainMenuStrip = menu
+
+    End Sub
+
+    Private Sub NewFile(ByVal sender As Object, ByVal e As EventArgs)
+        txt.Clear()
+        currentFile = ""
+        Me.Text = "My Notepad"
+    End Sub
+
+    Private Sub OpenFile(ByVal sender As Object, ByVal e As EventArgs)
+        Dim dlg As New OpenFileDialog()
+        dlg.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*"
+
+        If dlg.ShowDialog() = DialogResult.OK Then
+            txt.Text = My.Computer.FileSystem.ReadAllText(dlg.FileName)
+            currentFile = dlg.FileName
+            Me.Text = System.IO.Path.GetFileName(currentFile) & " - My Notepad"
+        End If
+    End Sub
+
+    Private Sub SaveFile(ByVal sender As Object, ByVal e As EventArgs)
+        If currentFile = "" Then
+            SaveAsFile(sender, e)
+        Else
+            My.Computer.FileSystem.WriteAllText(currentFile, txt.Text, False)
+        End If
+    End Sub
+
+    Private Sub SaveAsFile(ByVal sender As Object, ByVal e As EventArgs)
+        Dim dlg As New SaveFileDialog()
+        dlg.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*"
+        dlg.FileName = "Untitled.txt"
+
+        If dlg.ShowDialog() = DialogResult.OK Then
+            currentFile = dlg.FileName
+            My.Computer.FileSystem.WriteAllText(currentFile, txt.Text, False)
+            Me.Text = System.IO.Path.GetFileName(currentFile) & " - My Notepad"
+        End If
+    End Sub
+
+    Private Sub CutText(ByVal sender As Object, ByVal e As EventArgs)
+        txt.Cut()
+    End Sub
+
+    Private Sub CopyText(ByVal sender As Object, ByVal e As EventArgs)
+        txt.Copy()
+    End Sub
+
+    Private Sub PasteText(ByVal sender As Object, ByVal e As EventArgs)
+        txt.Paste()
+    End Sub
+
+    Private Sub SelectAllText(ByVal sender As Object, ByVal e As EventArgs)
+        txt.SelectAll()
+    End Sub
+
+    Private Sub ExitApp(ByVal sender As Object, ByVal e As EventArgs)
+        Me.Close()
+    End Sub
+
+End Class
