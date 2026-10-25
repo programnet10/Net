@@ -1,0 +1,60 @@
+
+<%@ Page Language="VB" AutoEventWireup="false" CodeFile="Default.aspx.vb" Inherits="_Default" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Login Form</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <h2>Login Form</h2>
+
+        Username:
+        <asp:TextBox ID="TextBox1" runat="server">
+        </asp:TextBox>
+
+        <br /><br />
+
+        Password:
+        <asp:TextBox ID="TextBox2" runat="server"
+            TextMode="Password">
+        </asp:TextBox>
+
+        <br /><br />
+
+        <asp:Button ID="Button1" runat="server"
+            Text="Login"
+            OnClick="Button1_Click" />
+
+        <br /><br />
+
+        <asp:Label ID="Label1" runat="server">
+        </asp:Label>
+    </form>
+</body>
+</html>
+
+
+//vb
+
+Partial Class _Default
+    Inherits System.Web.UI.Page
+
+    Protected Sub Button1_Click(ByVal sender As Object, _
+        ByVal e As System.EventArgs)
+
+        If TextBox1.Text = "admin" And _
+           TextBox2.Text = "1234" Then
+
+            Label1.Text = "Login Successful"
+            Label1.ForeColor = Drawing.Color.Green
+
+        Else
+            Label1.Text = "Invalid Username or Password"
+            Label1.ForeColor = Drawing.Color.Red
+        End If
+
+    End Sub
+
+End Class
