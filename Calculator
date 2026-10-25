@@ -1,0 +1,89 @@
+Public Class Form1
+
+    Dim firstNumber As Double
+    Dim operation As String
+    Dim newNumber As Boolean = True
+    Dim txtDisplay As New TextBox()
+
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+        Me.Text = "Calculator"
+        Me.Width = 350
+        Me.Height = 380
+        Me.StartPosition = FormStartPosition.CenterScreen
+
+        txtDisplay.Location = New Point(20, 20)
+        txtDisplay.Size = New Size(290, 40)
+        txtDisplay.Font = New Font("Arial", 18)
+        txtDisplay.TextAlign = HorizontalAlignment.Right
+        txtDisplay.ReadOnly = True
+        txtDisplay.Text = "0"
+        Me.Controls.Add(txtDisplay)
+
+        Dim labels() As String = {"7", "8", "9", "/", "4", "5", "6", "*", "1", "2", "3", "-", "C", "0", "=", "+"}
+        Dim i As Integer
+
+        For i = 0 To 15
+            Dim btn As New Button()
+            btn.Text = labels(i)
+            btn.Font = New Font("Arial", 12)
+            btn.Size = New Size(65, 50)
+            btn.Location = New Point(20 + (i Mod 4) * 72, 75 + (i \ 4) * 58)
+            AddHandler btn.Click, AddressOf Button_Click
+            Me.Controls.Add(btn)
+        Next
+
+    End Sub
+
+    Private Sub Button_Click(ByVal sender As Object, ByVal e As EventArgs)
+
+        Dim btn As Button = CType(sender, Button)
+        Dim value As String = btn.Text
+
+        If value >= "0" And value <= "9" Then
+            If newNumber Or txtDisplay.Text = "0" Then
+                txtDisplay.Text = value
+            Else
+                txtDisplay.Text = txtDisplay.Text & value
+            End If
+            newNumber = False
+
+        ElseIf value = "C" Then
+            txtDisplay.Text = "0"
+            firstNumber = 0
+            operation = ""
+            newNumber = True
+
+        ElseIf value = "+" Or value = "-" Or value = "*" Or value = "/" Then
+            firstNumber = Val(txtDisplay.Text)
+            operation = value
+            newNumber = True
+
+        ElseIf value = "=" Then
+            Dim secondNumber As Double = Val(txtDisplay.Text)
+            Dim result As Double = 0
+
+            Select Case operation
+                Case "+"
+                    result = firstNumber + secondNumber
+                Case "-"
+                    result = firstNumber - secondNumber
+                Case "*"
+                    result = firstNumber * secondNumber
+                Case "/"
+                    If secondNumber = 0 Then
+                        MessageBox.Show("Cannot divide by zero")
+                        txtDisplay.Text = "0"
+                        newNumber = True
+                        Exit Sub
+                    End If
+                    result = firstNumber / secondNumber
+            End Select
+
+            txtDisplay.Text = result.ToString()
+            newNumber = True
+        End If
+
+    End Sub
+
+End Class
