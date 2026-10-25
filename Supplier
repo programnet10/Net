@@ -1,0 +1,196 @@
+
+Public Class Form1
+
+    Private cmbproductid As New ComboBox()
+    Private cmbdiscount As New ComboBox()
+    Private txtproductname As New TextBox()
+    Private txtstocklevel As New TextBox()
+    Private txtcost As New TextBox()
+    Private txtorder As New TextBox()
+    Private txtremainder As New TextBox()
+    Private txttax As New TextBox()
+    Private txtsubtotal As New TextBox()
+    Private txttotal As New TextBox()
+
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+        Me.Text = "Supplier Information"
+        Me.Size = New Size(550, 520)
+        Me.StartPosition = FormStartPosition.CenterScreen
+
+        AddLabel("Product ID", 30, 25)
+        AddLabel("Product Name", 30, 65)
+        AddLabel("Stock Level", 30, 105)
+        AddLabel("Cost", 30, 145)
+        AddLabel("No. of Orders", 30, 185)
+        AddLabel("Remainder", 30, 225)
+        AddLabel("Discount (%)", 30, 265)
+        AddLabel("Tax", 30, 305)
+        AddLabel("Sub Total", 30, 345)
+        AddLabel("Total", 30, 385)
+
+        AddControl(cmbproductid, 180, 25)
+        AddControl(txtproductname, 180, 65)
+        AddControl(txtstocklevel, 180, 105)
+        AddControl(txtcost, 180, 145)
+        AddControl(txtorder, 180, 185)
+        AddControl(txtremainder, 180, 225)
+        AddControl(cmbdiscount, 180, 265)
+        AddControl(txttax, 180, 305)
+        AddControl(txtsubtotal, 180, 345)
+        AddControl(txttotal, 180, 385)
+
+        cmbproductid.Items.Add("pid001")
+        cmbproductid.Items.Add("pid002")
+        cmbproductid.Items.Add("pid003")
+        cmbproductid.Items.Add("pid004")
+
+        Dim d As Integer
+        For d = 0 To 25 Step 5
+            cmbdiscount.Items.Add(d)
+        Next
+
+        cmbdiscount.Text = "0"
+
+        txtproductname.ReadOnly = True
+        txtstocklevel.ReadOnly = True
+        txtcost.ReadOnly = True
+        txtremainder.ReadOnly = True
+        txttax.ReadOnly = True
+        txtsubtotal.ReadOnly = True
+        txttotal.ReadOnly = True
+
+        Dim btnCalculate As New Button()
+        btnCalculate.Text = "Calculate"
+        btnCalculate.Location = New Point(100, 435)
+        btnCalculate.Size = New Size(100, 35)
+        Me.Controls.Add(btnCalculate)
+
+        Dim btnDiscard As New Button()
+        btnDiscard.Text = "Discard"
+        btnDiscard.Location = New Point(230, 435)
+        btnDiscard.Size = New Size(100, 35)
+        Me.Controls.Add(btnDiscard)
+
+        AddHandler cmbproductid.SelectedIndexChanged, AddressOf Product_Changed
+        AddHandler txtorder.TextChanged, AddressOf Order_Changed
+        AddHandler btnCalculate.Click, AddressOf Calculate_Click
+        AddHandler btnDiscard.Click, AddressOf Discard_Click
+
+    End Sub
+
+    Private Sub AddLabel(ByVal caption As String, ByVal x As Integer, ByVal y As Integer)
+
+        Dim lbl As New Label()
+        lbl.Text = caption
+        lbl.Location = New Point(x, y)
+        lbl.Size = New Size(130, 25)
+        Me.Controls.Add(lbl)
+
+    End Sub
+
+    Private Sub AddControl(ByVal ctrl As Control, ByVal x As Integer, ByVal y As Integer)
+
+        ctrl.Location = New Point(x, y)
+        ctrl.Size = New Size(220, 25)
+        Me.Controls.Add(ctrl)
+
+    End Sub
+
+    Private Sub Product_Changed(ByVal sender As Object, ByVal e As EventArgs)
+
+        If cmbproductid.Text = "pid001" Then
+            txtproductname.Text = "Monitor"
+            txtstocklevel.Text = "100"
+            txtcost.Text = "20"
+
+        ElseIf cmbproductid.Text = "pid002" Then
+            txtproductname.Text = "Keyboard"
+            txtstocklevel.Text = "50"
+            txtcost.Text = "25"
+
+        ElseIf cmbproductid.Text = "pid003" Then
+            txtproductname.Text = "CPU"
+            txtstocklevel.Text = "80"
+            txtcost.Text = "50"
+
+        ElseIf cmbproductid.Text = "pid004" Then
+            txtproductname.Text = "Mouse"
+            txtstocklevel.Text = "50"
+            txtcost.Text = "20"
+        End If
+
+        UpdateRemainder()
+
+    End Sub
+
+    Private Sub Order_Changed(ByVal sender As Object, ByVal e As EventArgs)
+
+        UpdateRemainder()
+
+    End Sub
+
+    Private Sub UpdateRemainder()
+
+        If txtstocklevel.Text <> "" And txtorder.Text <> "" Then
+            txtremainder.Text = (Val(txtstocklevel.Text) - Val(txtorder.Text)).ToString()
+        ElseIf txtstocklevel.Text <> "" Then
+            txtremainder.Text = txtstocklevel.Text
+        Else
+            txtremainder.Text = ""
+        End If
+
+    End Sub
+
+    Private Sub Calculate_Click(ByVal sender As Object, ByVal e As EventArgs)
+
+        If cmbproductid.Text = "" Or txtorder.Text = "" Or cmbdiscount.Text = "" Then
+            MessageBox.Show("Select product ID, enter order quantity and discount.")
+            Exit Sub
+        End If
+
+        Dim stock As Decimal = Val(txtstocklevel.Text)
+        Dim quantity As Decimal = Val(txtorder.Text)
+        Dim cost As Decimal = Val(txtcost.Text)
+        Dim discount As Decimal = Val(cmbdiscount.Text)
+        Dim subtotal As Decimal
+        Dim tax As Decimal
+        Dim total As Decimal
+
+        If quantity <= 0 Then
+            MessageBox.Show("Enter a valid order quantity.")
+            Exit Sub
+        End If
+
+        If quantity > stock Then
+            MessageBox.Show("Stock limit reached.")
+            Exit Sub
+        End If
+
+        subtotal = cost * quantity
+        subtotal = subtotal - (subtotal * discount / 100)
+        tax = subtotal * 7.5D / 100
+        total = subtotal + tax
+
+        txtsubtotal.Text = subtotal.ToString("0.00")
+        txttax.Text = tax.ToString("0.00")
+        txttotal.Text = total.ToString("0.00")
+
+    End Sub
+
+    Private Sub Discard_Click(ByVal sender As Object, ByVal e As EventArgs)
+
+        cmbproductid.SelectedIndex = -1
+        cmbdiscount.Text = "0"
+        txtproductname.Clear()
+        txtstocklevel.Clear()
+        txtcost.Clear()
+        txtorder.Clear()
+        txtremainder.Clear()
+        txttax.Clear()
+        txtsubtotal.Clear()
+        txttotal.Clear()
+
+    End Sub
+
+End Class
