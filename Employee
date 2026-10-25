@@ -1,0 +1,33 @@
+
+Public Class Form1
+
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+        Me.Text = "Employee Pay Details"
+        Me.Size = New Size(720, 350)
+        Me.StartPosition = FormStartPosition.CenterScreen
+
+        Dim grid As New DataGridView()
+        grid.Location = New Point(10, 20)
+        grid.Size = New Size(680, 250)
+        grid.AllowUserToAddRows = False
+        grid.ReadOnly = True
+        grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+
+        grid.Columns.Add("EmpID", "Employee ID")
+        grid.Columns.Add("EmpName", "Employee Name")
+        grid.Columns.Add("BasicPay", "Basic Pay")
+        grid.Columns.Add("Allowance", "Allowance")
+        grid.Columns.Add("Deduction", "Deduction")
+        grid.Columns.Add("NetPay", "Net Pay")
+
+        grid.Rows.Add("E001", "Arun", "15000", "2000", "500", "16500")
+        grid.Rows.Add("E002", "Bala", "18000", "2500", "800", "19700")
+        grid.Rows.Add("E003", "Kumar", "20000", "3000", "1000", "22000")
+        grid.Rows.Add("E004", "Priya", "16000", "1800", "300", "17500")
+
+        Me.Controls.Add(grid)
+
+    End Sub
+
+End Class
