@@ -1,0 +1,110 @@
+
+Public Class Form1
+
+    Private txtName As New TextBox()
+    Private txtAge As New TextBox()
+    Private txtDisease As New TextBox()
+    Private grid As New DataGridView()
+
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+
+        Me.Text = "Hospital Management System"
+        Me.Size = New Size(700, 450)
+        Me.StartPosition = FormStartPosition.CenterScreen
+
+        Dim lblTitle As New Label()
+        lblTitle.Text = "HOSPITAL MANAGEMENT"
+        lblTitle.Location = New Point(200, 15)
+        lblTitle.Size = New Size(300, 30)
+        lblTitle.Font = New Font("Arial", 14, FontStyle.Bold)
+        Me.Controls.Add(lblTitle)
+
+        Dim lblName As New Label()
+        lblName.Text = "Patient Name:"
+        lblName.Location = New Point(30, 65)
+        lblName.Size = New Size(100, 25)
+        Me.Controls.Add(lblName)
+
+        txtName.Location = New Point(140, 65)
+        txtName.Size = New Size(180, 25)
+        Me.Controls.Add(txtName)
+
+        Dim lblAge As New Label()
+        lblAge.Text = "Age:"
+        lblAge.Location = New Point(30, 105)
+        lblAge.Size = New Size(100, 25)
+        Me.Controls.Add(lblAge)
+
+        txtAge.Location = New Point(140, 105)
+        txtAge.Size = New Size(180, 25)
+        Me.Controls.Add(txtAge)
+
+        Dim lblDisease As New Label()
+        lblDisease.Text = "Disease:"
+        lblDisease.Location = New Point(30, 145)
+        lblDisease.Size = New Size(100, 25)
+        Me.Controls.Add(lblDisease)
+
+        txtDisease.Location = New Point(140, 145)
+        txtDisease.Size = New Size(180, 25)
+        Me.Controls.Add(txtDisease)
+
+        Dim btnAdd As New Button()
+        btnAdd.Text = "Add Patient"
+        btnAdd.Location = New Point(350, 65)
+        btnAdd.Size = New Size(120, 35)
+        AddHandler btnAdd.Click, AddressOf AddPatient
+        Me.Controls.Add(btnAdd)
+
+        Dim btnClear As New Button()
+        btnClear.Text = "Clear"
+        btnClear.Location = New Point(350, 110)
+        btnClear.Size = New Size(120, 35)
+        AddHandler btnClear.Click, AddressOf ClearFields
+        Me.Controls.Add(btnClear)
+
+        grid.Location = New Point(30, 200)
+        grid.Size = New Size(620, 180)
+        grid.AllowUserToAddRows = False
+        grid.ReadOnly = True
+        grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+
+        grid.Columns.Add("PatientName", "Patient Name")
+        grid.Columns.Add("Age", "Age")
+        grid.Columns.Add("Disease", "Disease")
+
+        Me.Controls.Add(grid)
+
+    End Sub
+
+    Private Sub AddPatient(ByVal sender As Object, ByVal e As EventArgs)
+
+        If txtName.Text.Trim() = "" Or txtAge.Text.Trim() = "" Or txtDisease.Text.Trim() = "" Then
+            MessageBox.Show("Please enter all patient details.")
+            Exit Sub
+        End If
+
+        Dim age As Integer
+
+        If Integer.TryParse(txtAge.Text, age) = False Or age < 0 Then
+            MessageBox.Show("Please enter a valid age.")
+            Exit Sub
+        End If
+
+        grid.Rows.Add(txtName.Text, age.ToString(), txtDisease.Text)
+
+        txtName.Clear()
+        txtAge.Clear()
+        txtDisease.Clear()
+
+    End Sub
+
+    Private Sub ClearFields(ByVal sender As Object, ByVal e As EventArgs)
+
+        txtName.Clear()
+        txtAge.Clear()
+        txtDisease.Clear()
+
+    End Sub
+
+End Class
