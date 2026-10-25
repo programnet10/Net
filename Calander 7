@@ -1,0 +1,43 @@
+
+<%@ Page Language="VB" AutoEventWireup="false" CodeFile="Default.aspx.vb" Inherits="_Default" %>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Calendar Control</title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+            <h2>Calendar Control</h2>
+
+            <asp:Calendar ID="Calendar1" runat="server"
+                OnSelectionChanged="Calendar1_SelectionChanged">
+            </asp:Calendar>
+
+            <br />
+
+            <asp:Label ID="Label1" runat="server"
+                Text="Select a date from the calendar.">
+            </asp:Label>
+        </div>
+    </form>
+</body>
+</html>
+
+// vb
+
+
+Partial Class _Default
+    Inherits System.Web.UI.Page
+
+    Protected Sub Calendar1_SelectionChanged( _
+        ByVal sender As Object, _
+        ByVal e As System.EventArgs)
+
+        Label1.Text = "Selected Date: " & _
+            Calendar1.SelectedDate.ToString("dd-MM-yyyy")
+
+    End Sub
+
+End Class
